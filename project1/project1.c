@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 #define MAX_SIZE 100
 
 typedef struct Contact
@@ -69,13 +70,15 @@ void showAll(Contact phoneBook[], int curr_pos)
 
 void delete (Contact phoneBook[], int *curr_pos)
 {
-  char name_to_delete[21];
+  char nameToDelete[21];
   printf("Name:");
-  scanf("%s", name_to_delete);
+  scanf("%s", nameToDelete);
+
+  int flag = 0;
 
   for (int i = 0; i < *curr_pos; i++)
   {
-    if (strcmp(phoneBook[i].name, name_to_delete) == 0)
+    if (strcmp(phoneBook[i].name, nameToDelete) == 0)
     {
       while (i != *curr_pos - 1)
       {
@@ -83,11 +86,36 @@ void delete (Contact phoneBook[], int *curr_pos)
         i++;
       }
       *curr_pos = *curr_pos - 1;
+      flag = 1;
       break;
     }
-    if (i == *curr_pos - 1)
+  }
+
+  if (!flag)
+  {
+    printf("NO MEMBER\n");
+  }
+}
+
+int getMonth(Contact phoneBook)
+{
+  char a = phoneBook.birthDate[5];
+  char b = phoneBook.birthDate[4];
+  int res = 10 * (b - '0') + (a - '0');
+  return res;
+}
+
+void findByBirth(Contact phoneBook[], int curr_pos)
+{
+  printf("Birth:");
+  int monthToFind;
+  scanf("%d", &monthToFind);
+  for (int i = 0; i < curr_pos; i++)
+  {
+    int month = getMonth(phoneBook[i]);
+    if (month == monthToFind)
     {
-      printf("NO MEMBER\n");
+      printf("%s %s %s \n", phoneBook[i].name, phoneBook[i].phoneNumber, phoneBook[i].birthDate);
     }
   }
 }
@@ -114,8 +142,13 @@ int main()
     case 2:
       showAll(phoneBook, curr_pos);
       break;
+
     case 3:
-      delete(phoneBook, &curr_pos);
+      delete (phoneBook, &curr_pos);
+      break;
+
+    case 4:
+      findByBirth(phoneBook, curr_pos);
       break;
 
     default:

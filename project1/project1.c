@@ -4,10 +4,40 @@
 
 typedef struct Contact
 {
-  char name[20];
-  char phoneNumber[15];
-  char birthDate[8];
+  // All char arrays have an additiona byte due to the way C handles strings (the size of string itself + the null terminator)
+  char name[21];
+  char phoneNumber[16];
+  char birthDate[9];
 } Contact;
+
+void swap(Contact *A, Contact *B)
+{
+  //Simple swap
+  Contact temp = *A;
+  *A = *B;
+  *B = temp;
+}
+
+void sort(Contact phoneBook[], int curr_pos)
+{
+  //Implementing a simple bubble sort algorithm to sort the contacts by the name field
+  int swapped = 0;
+  for (int i = 0; i < curr_pos - 1; i++)
+  {
+    swapped = 0;
+    for (int j = 0; j < curr_pos - i - 1; j++)
+    {
+      if (strcmp(phoneBook[j].name, phoneBook[j + 1].name) > 0)
+      {
+        swap(&phoneBook[j], &phoneBook[j+1]);
+        swapped = 1;
+      }
+    }
+
+    if (swapped == 0)
+      break;
+  }
+}
 
 void registration(Contact phoneBook[], int *curr_pos)
 {
@@ -22,10 +52,19 @@ void registration(Contact phoneBook[], int *curr_pos)
   scanf("%s", phoneBook[*curr_pos].phoneNumber);
   printf("Birth:");
   scanf("%s", phoneBook[*curr_pos].birthDate);
+  printf("%s %s %s\n", phoneBook[*curr_pos].name, phoneBook[*curr_pos].phoneNumber, phoneBook[*curr_pos].birthDate);
   *curr_pos = *curr_pos + 1;
   printf("<<%d>>\n", *curr_pos);
-  sort(phoneBook, curr_pos);
+  sort(phoneBook, *curr_pos);
 };
+
+void showAll(Contact phoneBook[], int curr_pos)
+{
+  for (int i = 0; i < curr_pos; i++)
+  {
+    printf("%s %s %s \n", phoneBook[i].name, phoneBook[i].phoneNumber, phoneBook[i].birthDate);
+  }
+}
 
 int main()
 {
@@ -44,6 +83,12 @@ int main()
     {
     case 1:
       registration(phoneBook, &curr_pos);
+      break;
+
+    case 2:
+      showAll(phoneBook, curr_pos);
+      break;
+    case 3:
       break;
 
     default:

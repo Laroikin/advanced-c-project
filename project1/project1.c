@@ -12,7 +12,7 @@ typedef struct Contact
 
 void swap(Contact *A, Contact *B)
 {
-  //Simple swap
+  // Simple swap
   Contact temp = *A;
   *A = *B;
   *B = temp;
@@ -20,7 +20,7 @@ void swap(Contact *A, Contact *B)
 
 void sort(Contact phoneBook[], int curr_pos)
 {
-  //Implementing a simple bubble sort algorithm to sort the contacts by the name field
+  // Implementing a simple bubble sort algorithm to sort the contacts by the name field
   int swapped = 0;
   for (int i = 0; i < curr_pos - 1; i++)
   {
@@ -29,7 +29,7 @@ void sort(Contact phoneBook[], int curr_pos)
     {
       if (strcmp(phoneBook[j].name, phoneBook[j + 1].name) > 0)
       {
-        swap(&phoneBook[j], &phoneBook[j+1]);
+        swap(&phoneBook[j], &phoneBook[j + 1]);
         swapped = 1;
       }
     }
@@ -60,9 +60,35 @@ void registration(Contact phoneBook[], int *curr_pos)
 
 void showAll(Contact phoneBook[], int curr_pos)
 {
+  // Simply iterating through every element in array
   for (int i = 0; i < curr_pos; i++)
   {
     printf("%s %s %s \n", phoneBook[i].name, phoneBook[i].phoneNumber, phoneBook[i].birthDate);
+  }
+}
+
+void delete (Contact phoneBook[], int *curr_pos)
+{
+  char name_to_delete[21];
+  printf("Name:");
+  scanf("%s", name_to_delete);
+
+  for (int i = 0; i < *curr_pos; i++)
+  {
+    if (strcmp(phoneBook[i].name, name_to_delete) == 0)
+    {
+      while (i != *curr_pos - 1)
+      {
+        phoneBook[i] = phoneBook[i + 1];
+        i++;
+      }
+      *curr_pos = *curr_pos - 1;
+      break;
+    }
+    if (i == *curr_pos - 1)
+    {
+      printf("NO MEMBER\n");
+    }
   }
 }
 
@@ -89,6 +115,7 @@ int main()
       showAll(phoneBook, curr_pos);
       break;
     case 3:
+      delete(phoneBook, &curr_pos);
       break;
 
     default:

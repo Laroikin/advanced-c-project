@@ -12,7 +12,7 @@ typedef struct Contact
 
 void swap(Contact *A, Contact *B)
 {
-  // Simple swap
+  // Simple swap using pointers
   Contact temp = *A;
   *A = *B;
   *B = temp;
@@ -41,7 +41,8 @@ void sort(Contact phoneBook[], int curr_pos)
 
 void registration(Contact phoneBook[], int *curr_pos)
 {
-  if (*curr_pos == MAX_SIZE)
+  //If current size is bigger or equal to max size, return 
+  if (*curr_pos >= MAX_SIZE)
   {
     printf("OVERFLOW\n");
     return;
@@ -53,8 +54,10 @@ void registration(Contact phoneBook[], int *curr_pos)
   printf("Birth:");
   scanf("%s", phoneBook[*curr_pos].birthDate);
   printf("%s %s %s\n", phoneBook[*curr_pos].name, phoneBook[*curr_pos].phoneNumber, phoneBook[*curr_pos].birthDate);
+  //Incrementing the current size
   *curr_pos = *curr_pos + 1;
   printf("<<%d>>\n", *curr_pos);
+  //Sorting after adding to array
   sort(phoneBook, *curr_pos);
 };
 
@@ -79,12 +82,15 @@ void delete (Contact phoneBook[], int *curr_pos)
   {
     if (strcmp(phoneBook[i].name, nameToDelete) == 0)
     {
+      //Rewrite everything from the current position till the end
       while (i != *curr_pos - 1)
       {
         phoneBook[i] = phoneBook[i + 1];
         i++;
       }
+      //Decrement the size
       *curr_pos = *curr_pos - 1;
+      //Change the flag
       flag = 1;
       break;
     }
@@ -92,12 +98,14 @@ void delete (Contact phoneBook[], int *curr_pos)
 
   if (!flag)
   {
+    //If not found, displays this message
     printf("NO MEMBER\n");
   }
 }
 
 int getMonth(Contact phoneBook)
 {
+  //Function which gets an integer of a month of the given element of the array
   char a = phoneBook.birthDate[5];
   char b = phoneBook.birthDate[4];
   int res = 10 * (b - '0') + (a - '0');
@@ -111,6 +119,7 @@ void findByBirth(Contact phoneBook[], int curr_pos)
   scanf("%d", &monthToFind);
   for (int i = 0; i < curr_pos; i++)
   {
+    //Iterating through all elements in the array and displaying only matching entries
     int month = getMonth(phoneBook[i]);
     if (month == monthToFind)
     {

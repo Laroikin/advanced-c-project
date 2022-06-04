@@ -26,6 +26,22 @@ char *getln()
   return str;
 }
 
+char *getlnf(char *passed_str)
+{
+  // Function to allocate exact amount of memory for each string in phoneBook from a string
+  char *str;
+
+  char buf[101]; // Buffer
+
+  sscanf(passed_str, "%s", buf); // Read the string and store it in buffer
+
+  str = (char *)malloc(strlen(buf) + 1);
+
+  strcpy(str, buf);
+
+  return str;
+}
+
 void swap(Contact *A, Contact *B)
 {
   // Simple swap using pointers
@@ -156,6 +172,52 @@ void findByBirth(Contact *phoneBook, int curr_pos)
   }
 }
 
+void regFromFile(Contact **phoneBook, int *curr_pos, int size)
+{
+  FILE *ptr;
+  if ((ptr = fopen("contacts.txt", "r")) == NULL)
+  {
+    printf("Error! opening file");
+
+    // Program exits if the file pointer returns NULL.
+    exit(1);
+  }
+
+  char buf[303];
+  char *str;
+  // Reading file line by line
+  while ((str = fgets(buf, sizeof(buf), ptr)) != NULL)
+  {
+    if (*curr_pos >= size)
+    {
+      printf("OVERFLOW\n");
+      return;
+    }
+
+    if (*curr_pos != 0)
+    {
+      // Reallocating memory
+      *phoneBook = realloc(*phoneBook, (*curr_pos + 1) * sizeof(Contact));
+    }
+    // I'm using this weird syntax to get an access to basically a pointer to a pointer to a pointer (I love low level programming!!!!!!!)
+    char name[101];
+    char phone[101];
+    char birth[101];
+    sscanf(str, "%s %s %s", name, phone, birth);
+    (*phoneBook)[*curr_pos].name = getlnf(name);
+    (*phoneBook)[*curr_pos].phoneNumber = getlnf(phone);
+    (*phoneBook)[*curr_pos].birthDate = getlnf(birth);
+
+    // Incrementing the current position
+    *curr_pos = *curr_pos + 1;
+    // Sorting after adding to array
+    sort(*phoneBook, *curr_pos);
+
+    // This project took way much time than I expected (i hate pointers)
+  }
+  fclose(ptr);
+}
+
 int main()
 {
   int max_num;
@@ -166,7 +228,7 @@ int main()
   int curr_pos = 0;
 
   int menu = 0;
-  while (menu != 5)
+  while (menu != 6)
   {
     printf("*****Menu*****\n");
     printf("<1.Registration><2.ShowAll><3.Delete><4.FindByBirth><5.Exit>\n");
@@ -191,6 +253,10 @@ int main()
 
     case 4:
       findByBirth(phoneBook, curr_pos);
+      break;
+
+    case 5:
+      regFromFile(&phoneBook, &curr_pos, max_num);
       break;
 
     default:

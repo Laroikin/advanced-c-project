@@ -175,7 +175,7 @@ void findByBirth(Contact *phoneBook, int curr_pos)
 void regFromFile(Contact **phoneBook, int *curr_pos, int size)
 {
   FILE *ptr;
-  if ((ptr = fopen("contacts.txt", "r")) == NULL)
+  if ((ptr = fopen("PHONE_BOOK.txt", "r")) == NULL)
   {
     printf("Error! opening file");
 
@@ -199,7 +199,7 @@ void regFromFile(Contact **phoneBook, int *curr_pos, int size)
       // Reallocating memory
       *phoneBook = realloc(*phoneBook, (*curr_pos + 1) * sizeof(Contact));
     }
-    // I'm using this weird syntax to get an access to basically a pointer to a pointer to a pointer (I love low level programming!!!!!!!)
+    // Creating new strings to store each field
     char name[101];
     char phone[101];
     char birth[101];
@@ -212,10 +212,26 @@ void regFromFile(Contact **phoneBook, int *curr_pos, int size)
     *curr_pos = *curr_pos + 1;
     // Sorting after adding to array
     sort(*phoneBook, *curr_pos);
-
-    // This project took way much time than I expected (i hate pointers)
   }
   fclose(ptr);
+}
+
+void writeToFile(Contact *phoneBook, int curr_pos)
+{
+// Function to write to file after exiting
+  FILE *ptr;
+  if ((ptr = fopen("PHONE_BOOK.txt", "w")) == NULL)
+  {
+    printf("Error! opening file");
+
+    // Program exits if the file pointer returns NULL.
+    exit(1);
+  }
+
+  for (int i = 0; i < curr_pos; i++)
+  {
+    fprintf(ptr, "%s %s %s \n", phoneBook[i].name, phoneBook[i].phoneNumber, phoneBook[i].birthDate);
+  }
 }
 
 int main()
@@ -228,10 +244,10 @@ int main()
   int curr_pos = 0;
 
   int menu = 0;
-  while (menu != 6)
+  while (1)
   {
     printf("*****Menu*****\n");
-    printf("<1.Registration><2.ShowAll><3.Delete><4.FindByBirth><5.Exit>\n");
+    printf("<1.Registration><2.ShowAll><3.Delete><4.FindByBirth><5.RegFromFile><6.Exit>\n");
     printf("Enter_the_menu_number:");
     scanf("%d", &menu);
 
@@ -259,10 +275,22 @@ int main()
       regFromFile(&phoneBook, &curr_pos, max_num);
       break;
 
+    case 6:
+      writeToFile(phoneBook, curr_pos);
+      free(phoneBook->birthDate);
+      free(phoneBook->name);
+      free(phoneBook->phoneNumber);
+      free(phoneBook);
+      return 0;
+      break;
+
     default:
       break;
     }
   }
   // Freeing phoneBook
+  free(phoneBook->birthDate);
+  free(phoneBook->name);
+  free(phoneBook->phoneNumber);
   free(phoneBook);
 }

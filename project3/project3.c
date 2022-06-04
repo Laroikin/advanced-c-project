@@ -87,6 +87,10 @@ void registration(Contact **phoneBook, int *curr_pos, int size)
     // Reallocating memory
     *phoneBook = realloc(*phoneBook, (*curr_pos + 1) * sizeof(Contact));
   }
+  else
+  {
+    *phoneBook = (Contact *)malloc(sizeof(Contact));
+  }
   printf("Name:");
   // I'm using this weird syntax to get an access to basically a pointer to a pointer to a pointer (I love low level programming!!!!!!!)
   (*phoneBook)[*curr_pos].name = getln();
@@ -132,9 +136,9 @@ void delete (Contact **phoneBook, int *curr_pos)
         i++;
       }
       // Free the memory allocated to struct fields to prevent memory leak
-      free((*phoneBook)[*curr_pos].birthDate);
       free((*phoneBook)[*curr_pos].name);
       free((*phoneBook)[*curr_pos].phoneNumber);
+      free((*phoneBook)[*curr_pos].birthDate);
       *phoneBook = realloc(*phoneBook, (*curr_pos - 1) * sizeof(Contact));
       // Decrement the size
       *curr_pos = *curr_pos - 1;
@@ -203,6 +207,10 @@ void regFromFile(Contact **phoneBook, int *curr_pos, int size)
       // Reallocating memory
       *phoneBook = realloc(*phoneBook, (*curr_pos + 1) * sizeof(Contact));
     }
+    else
+    {
+      *phoneBook = (Contact *)malloc(sizeof(Contact));
+    }
     // Creating new strings to store each field
     char name[101];
     char phone[101];
@@ -222,7 +230,7 @@ void regFromFile(Contact **phoneBook, int *curr_pos, int size)
 
 void writeToFile(Contact *phoneBook, int curr_pos)
 {
-// Function to write to file after exiting
+  // Function to write to file after exiting
   FILE *ptr;
   if ((ptr = fopen("PHONE_BOOK.txt", "w")) == NULL)
   {

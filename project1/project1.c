@@ -1,5 +1,6 @@
 // Project#3 for Advanced C course @ Sejong University
 // Solved by Abdiganiev Saidbek (21012865)
+// Check the commit history at https://github.com/Laroikin/advanced-c-project
 
 #include <stdio.h>
 #include <string.h>

@@ -1,3 +1,6 @@
+// Project#3 for Advanced C course @ Sejong University
+// Solved by Abdiganiev Saidbek (21012865)
+
 #include <stdio.h>
 #include <string.h>
 #define MAX_SIZE 100

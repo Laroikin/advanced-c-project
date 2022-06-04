@@ -198,5 +198,8 @@ int main()
     }
   }
   // Freeing phoneBook
+  free(phoneBook->birthDate);
+  free(phoneBook->name);
+  free(phoneBook->phoneNumber);
   free(phoneBook);
 }
